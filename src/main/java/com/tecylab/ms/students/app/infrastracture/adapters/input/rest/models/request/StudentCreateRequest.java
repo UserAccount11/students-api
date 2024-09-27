@@ -27,6 +27,7 @@ public class StudentCreateRequest {
   @Min(value = 1, message = "Field age must be greater than zero")
   private Integer age;
 
+  @NotBlank(message = "Field email cannot be null or blank")
   @Email(message = "Field email invalid format")
   private String email;
 

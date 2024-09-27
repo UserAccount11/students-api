@@ -31,7 +31,5 @@ public class StudentEntity {
   private Integer age;
   private String email;
   private String address;
-  private LocalDate createdAt;
-  private LocalDate lastUpdate;
 
 }
