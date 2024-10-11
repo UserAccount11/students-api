@@ -4,4 +4,7 @@ import com.tecylab.ms.students.app.infrastracture.adapters.output.persistence.mo
 import org.springframework.data.repository.CrudRepository;
 
 public interface StudentJpaRepository extends CrudRepository<StudentEntity, Long> {
+
+  boolean existsByEmailIgnoreCase(String email);
+
 }

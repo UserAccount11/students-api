@@ -1,5 +1,6 @@
 package com.tecylab.ms.students.app.infrastracture.adapters.input.rest;
 
+import com.tecylab.ms.students.app.domain.exceptions.StudentEmailAlreadyExistsException;
 import com.tecylab.ms.students.app.domain.exceptions.StudentNotFoundException;
 import com.tecylab.ms.students.app.infrastracture.adapters.input.rest.models.response.ErrorResponse;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -17,6 +18,7 @@ import static com.tecylab.ms.students.app.infrastracture.adapters.input.rest.mod
 import static com.tecylab.ms.students.app.infrastracture.adapters.input.rest.models.enums.ErrorType.SYSTEM;
 import static com.tecylab.ms.students.app.infrastracture.utils.ErrorCatalog.INTERNAL_SERVER_ERROR;
 import static com.tecylab.ms.students.app.infrastracture.utils.ErrorCatalog.STUDENT_BAD_PARAMETERS;
+import static com.tecylab.ms.students.app.infrastracture.utils.ErrorCatalog.STUDENT_EMAIL_ALREADY_EXISTS;
 import static com.tecylab.ms.students.app.infrastracture.utils.ErrorCatalog.STUDENT_NOT_FOUND;
 
 @RestControllerAdvice
@@ -45,6 +47,19 @@ public class GlobalControllerAdvice {
         .details(bindingResult.getFieldErrors().stream()
             .map(DefaultMessageSourceResolvable::getDefaultMessage)
             .toList())
+        .timestamp(LocalDate.now().toString())
+        .build();
+  }
+
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ExceptionHandler(StudentEmailAlreadyExistsException.class)
+  public ErrorResponse handleStudentEmailAlreadyExistsException(
+      StudentEmailAlreadyExistsException e) {
+    return ErrorResponse.builder()
+        .code(STUDENT_EMAIL_ALREADY_EXISTS.getCode())
+        .type(FUNCTIONAL)
+        .message(STUDENT_EMAIL_ALREADY_EXISTS.getMessage())
+        .details(Collections.singletonList(e.getMessage()))
         .timestamp(LocalDate.now().toString())
         .build();
   }

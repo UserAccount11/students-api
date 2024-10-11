@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,14 +31,19 @@ public class StudentRestAdapter {
   private final StudentInputPort inputPort;
   private final StudentRestMapper restMapper;
 
-  @GetMapping
-  public List<StudentResponse> findAll() {
-    return restMapper.toStudentResponses(inputPort.findAll());
-  }
-
   @GetMapping("/{id}")
   public StudentResponse findById(@PathVariable Long id) {
     return restMapper.toStudentResponse(inputPort.findById(id));
+  }
+
+  @GetMapping("/find-by-ids")
+  public List<StudentResponse> findByIds(@RequestParam List<Long> ids) {
+    return restMapper.toStudentResponses(inputPort.findByIds(ids));
+  }
+
+  @GetMapping
+  public List<StudentResponse> findAll() {
+    return restMapper.toStudentResponses(inputPort.findAll());
   }
 
   @PostMapping
