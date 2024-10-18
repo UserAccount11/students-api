@@ -1,12 +1,14 @@
 package com.tecylab.ms.students.app.application.services;
 
 import com.tecylab.ms.students.app.application.ports.input.StudentInputPort;
+import com.tecylab.ms.students.app.application.ports.output.ExternalCoursesOutputPort;
 import com.tecylab.ms.students.app.application.ports.output.StudentPersistencePort;
 import com.tecylab.ms.students.app.domain.exceptions.StudentEmailAlreadyExistsException;
 import com.tecylab.ms.students.app.domain.exceptions.StudentNotFoundException;
 import com.tecylab.ms.students.app.domain.models.Student;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,6 +17,7 @@ import java.util.List;
 public class StudentService implements StudentInputPort {
 
   private final StudentPersistencePort persistencePort;
+  private final ExternalCoursesOutputPort coursesOutputPort;
 
   @Override
   public Student findById(Long id) {
@@ -67,5 +70,6 @@ public class StudentService implements StudentInputPort {
       throw new StudentNotFoundException();
     }
     persistencePort.deleteById(id);
+    coursesOutputPort.remoStudentFromCollection(id);
   }
 }
