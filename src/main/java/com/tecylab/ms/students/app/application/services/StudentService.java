@@ -8,7 +8,6 @@ import com.tecylab.ms.students.app.domain.exceptions.StudentNotFoundException;
 import com.tecylab.ms.students.app.domain.models.Student;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
