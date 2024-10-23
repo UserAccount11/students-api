@@ -3,7 +3,6 @@ package com.tecylab.ms.students.app.infrastracture.adapters.input.rest;
 import com.tecylab.ms.students.app.application.ports.input.StudentInputPort;
 import com.tecylab.ms.students.app.infrastracture.adapters.input.rest.mapper.StudentRestMapper;
 import com.tecylab.ms.students.app.infrastracture.adapters.input.rest.models.request.StudentCreateRequest;
-import com.tecylab.ms.students.app.infrastracture.adapters.input.rest.models.request.StudentUpdateRequest;
 import com.tecylab.ms.students.app.infrastracture.adapters.input.rest.models.response.StudentResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
