@@ -3,6 +3,7 @@ package com.tecylab.ms.students.app.infrastructure.adapters.input.rest;
 import com.tecylab.ms.students.app.domain.exceptions.StudentEmailAlreadyExistsException;
 import com.tecylab.ms.students.app.domain.exceptions.StudentNotFoundException;
 import com.tecylab.ms.students.app.infrastructure.adapters.input.rest.models.response.ErrorResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -21,6 +22,7 @@ import static com.tecylab.ms.students.app.infrastructure.utils.ErrorCatalog.STUD
 import static com.tecylab.ms.students.app.infrastructure.utils.ErrorCatalog.STUDENT_EMAIL_ALREADY_EXISTS;
 import static com.tecylab.ms.students.app.infrastructure.utils.ErrorCatalog.STUDENT_NOT_FOUND;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalControllerAdvice {
 
@@ -67,6 +69,8 @@ public class GlobalControllerAdvice {
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   @ExceptionHandler(Exception.class)
   public ErrorResponse handleException(Exception e) {
+    e.printStackTrace();
+    log.error(e.toString());
     return ErrorResponse.builder()
         .code(INTERNAL_SERVER_ERROR.getCode())
         .type(SYSTEM)

@@ -5,17 +5,68 @@ services:
     container_name: postgres
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 12345
+      POSTGRES_PASSWORD: postgres
       POSTGRES_DB: students_db
     ports:
       - "5432:5432"
+
   students-service:
     build:
       context: .
       dockerfile: Dockerfile
     image: students-service:latest
     container_name: students-service
-    ports:
-      - "8080:8080"
     depends_on:
       - postgres
+    environment:
+      DB_HOST: jdbc:postgresql://postgres:5432/students_db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      COURSES_URL: http://courses-service:8081
+    ports:
+      - "8080:8080"
+
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: courses_db
+    ports:
+      - "3306:3306"
+
+  courses-service:
+    image: mcubasgr/courses-service:v1
+    container_name: courses-service
+    depends_on:
+      - mysql
+    environment:
+      DB_HOST: jdbc:mysql://mysql:3306/courses_db
+      DB_USER: root
+      DB_PASSWORD: root
+      STUDENTS_URL: http://students-service:8080
+    ports:
+      - "8081:8081"
+
+  authorization-server:
+    image: mcubasgr/authorization-server:latest
+    container_name: authorization-server
+    environment:
+      CLIENT_URL: http://gateway-server:8090
+    ports:
+      - "9000:9000"
+
+  gateway-server:
+    image: mcubasgr/gateway-server:latest
+    container_name: gateway-server
+    depends_on:
+      - students-service
+      - courses-service
+      - authorization-server
+    environment:
+      STUDENTS_URL: http://students-service:8080/students
+      COURSES_URL: http://courses-service:8081/courses
+      AUTH_SERVER: http://authorization-server:9000
+      REDIRECT_URL: http://gateway-server:8090/authorized
+    ports:
+      - "8090:8090"
