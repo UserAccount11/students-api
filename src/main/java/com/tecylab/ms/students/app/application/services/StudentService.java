@@ -7,11 +7,9 @@ import com.tecylab.ms.students.app.domain.exceptions.StudentEmailAlreadyExistsEx
 import com.tecylab.ms.students.app.domain.exceptions.StudentNotFoundException;
 import com.tecylab.ms.students.app.domain.models.Student;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 @RequiredArgsConstructor
 public class StudentService implements StudentInputPort {
 

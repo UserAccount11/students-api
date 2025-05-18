@@ -1,6 +1,6 @@
 ARG MS_NAME=students_service
 
-FROM openjdk:21 AS build-image-stage
+FROM eclipse-temurin:21-jdk AS build-image-stage
 
 ARG MS_NAME
 
@@ -17,7 +17,7 @@ COPY ./src ./src
 
 RUN ./mvnw clean package -DskipTests
 
-FROM openjdk:21
+FROM eclipse-temurin:21-jdk
 
 ARG MS_NAME
 

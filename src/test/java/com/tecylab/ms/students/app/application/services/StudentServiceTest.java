@@ -41,7 +41,7 @@ class StudentServiceTest {
   private StudentService studentService;
 
   @Test
-  void testFindById_Success() {
+  void givenExistingStudent_whenFindById_thenReturnStudent() {
     // Inicialización
     when(persistencePort.findById(anyLong()))
         .thenReturn(Optional.of(TestUtils.buildStudentMock()));
@@ -58,7 +58,7 @@ class StudentServiceTest {
   }
 
   @Test
-  void testFindById_NotFound() {
+  void givenNonExistingStudent_whenFindById_thenThrowStudentNotFoundException() {
     when(persistencePort.findById(anyLong()))
         .thenReturn(Optional.empty());
 
@@ -68,7 +68,7 @@ class StudentServiceTest {
   }
 
   @Test
-  void testFindByIds_Success() {
+  void givenValidStudentIds_whenFindByIds_thenReturnListOfStudents() {
     List<Long> ids = Collections.singletonList(1L);
 
     when(persistencePort.findByIds(anyCollection()))
@@ -85,7 +85,7 @@ class StudentServiceTest {
   }
 
   @Test
-  void testFindByAll() {
+  void givenStudentsExist_whenFindAll_thenReturnAllStudents() {
     when(persistencePort.findAll())
         .thenReturn(Collections.singletonList(TestUtils.buildStudentMock()));
 
@@ -100,7 +100,7 @@ class StudentServiceTest {
   }
 
   @Test
-  void testSave_Success() {
+  void givenNewStudentWithUniqueEmail_whenSave_thenPersistAndReturnStudent() {
     Student studentToSave = Student.builder()
         .id(1L)
         .firstname("Pepito")
@@ -131,7 +131,7 @@ class StudentServiceTest {
   }
 
   @Test
-  void testSave_Failed() {
+  void givenStudentWithExistingEmail_whenSave_thenThrowEmailAlreadyExistsException() {
     Student studentToSave = Student.builder()
         .id(1L)
         .firstname("Pepito")
@@ -151,7 +151,7 @@ class StudentServiceTest {
   }
 
   @Test
-  void testUpdated_Success() {
+  void givenValidUpdateAndUniqueEmail_whenUpdate_thenUpdateAndReturnStudent() {
     Student studentToUpdate = Student.builder()
         .firstname("Pepito")
         .lastname("Lopez")
@@ -184,7 +184,7 @@ class StudentServiceTest {
   }
 
   @Test
-  void testUpdate_FailedByAlreadyExistsEmail() {
+  void givenExistingEmail_whenUpdate_thenThrowEmailAlreadyExistsException() {
     Student studentToUpdate = Student.builder()
         .firstname("Pepito")
         .lastname("Lopez")
@@ -204,7 +204,7 @@ class StudentServiceTest {
   }
 
   @Test
-  void testUpdate_FailedByStudentNotFound() {
+  void givenNonExistingStudent_whenUpdate_thenThrowStudentNotFoundException() {
     Student studentToUpdate = Student.builder()
         .firstname("Pepito")
         .lastname("Lopez")
@@ -227,7 +227,7 @@ class StudentServiceTest {
   }
 
   @Test
-  void testDelete_Success() {
+  void givenExistingStudent_whenDeleteById_thenDeleteAndRemoveFromCourses() {
     when(persistencePort.findById(anyLong()))
         .thenReturn(Optional.of(TestUtils.buildStudentMock()));
 
@@ -238,7 +238,7 @@ class StudentServiceTest {
   }
 
   @Test
-  void testDelete_FailedByStudentNotFound() {
+  void givenNonExistingStudent_whenDeleteById_thenThrowStudentNotFoundException() {
     when(persistencePort.findById(anyLong()))
         .thenReturn(Optional.empty());
 

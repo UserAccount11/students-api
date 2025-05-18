@@ -22,11 +22,9 @@ class CourseRestClientAdapterTest {
   private CourseRestClientAdapter restClientAdapter;
 
   @Test
-  void testRemoStudentFromCollection() {
+  void givenStudentId_whenRemoStudentFromCollection_thenDelegateCallToFeignClient() {
     doNothing().when(client).remoStudentFromCollection(anyLong());
-
     restClientAdapter.remoStudentFromCollection(1L);
-
     verify(client, times(1)).remoStudentFromCollection(1L);
   }
 }

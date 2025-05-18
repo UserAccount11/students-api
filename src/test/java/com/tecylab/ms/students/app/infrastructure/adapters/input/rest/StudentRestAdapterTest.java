@@ -12,8 +12,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
@@ -37,16 +39,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ActiveProfiles("test")
+@ContextConfiguration(classes = {
+    StudentRestAdapter.class
+})
 @WebMvcTest(StudentRestAdapter.class)
 class StudentRestAdapterTest {
 
   @Autowired
   private MockMvc mockMvc;
 
-  @MockBean
+  @MockitoBean
   private StudentInputPort inputPort;
 
-  @MockBean
+  @MockitoBean
   private StudentRestMapper restMapper;
 
   private ObjectMapper objectMapper;
@@ -58,7 +64,7 @@ class StudentRestAdapterTest {
 
   @Test
   @DisplayName("Test find by id when id exists")
-  void testFindById() throws Exception {
+  void givenExistingStudentId_whenFindById_thenReturnsStudentResponse() throws Exception {
     Student student = TestUtils.buildStudentMock();
     StudentResponse studentResponse = TestUtils.buildStudentResponseMock();
 
@@ -80,7 +86,7 @@ class StudentRestAdapterTest {
   }
 
   @Test
-  void testFindByIds() throws Exception {
+  void givenStudentIds_whenFindByIds_thenReturnsMatchingStudents() throws Exception {
     List<Student> students = Collections.singletonList(TestUtils.buildStudentMock());
     List<StudentResponse> responses = Collections.singletonList(TestUtils.buildStudentResponseMock());
 
@@ -102,7 +108,7 @@ class StudentRestAdapterTest {
   }
 
   @Test
-  void testFindAll() throws Exception {
+  void givenExistingStudents_whenFindAll_thenReturnsAllStudents() throws Exception {
     List<Student> students = Collections.singletonList(TestUtils.buildStudentMock());
     List<StudentResponse> responses = Collections.singletonList(TestUtils.buildStudentResponseMock());
 
@@ -123,7 +129,7 @@ class StudentRestAdapterTest {
   }
 
   @Test
-  void testSave() throws Exception {
+  void givenValidCreateRequest_whenSave_thenReturnsCreatedStudentWithLocation() throws Exception {
     StudentCreateRequest request = TestUtils.buildStudentCreateRequest();
     Student student = TestUtils.buildStudentMock();
     StudentResponse response = TestUtils.buildStudentResponseMock();
@@ -151,7 +157,7 @@ class StudentRestAdapterTest {
   }
 
   @Test
-  void testUpdate() throws Exception {
+  void givenStudentIdAndUpdateRequest_whenUpdate_thenReturnsUpdatedStudent() throws Exception {
     StudentCreateRequest request = TestUtils.buildStudentCreateRequest();
     Student student = TestUtils.buildStudentMock();
     StudentResponse response = TestUtils.buildStudentResponseMock();
@@ -182,7 +188,8 @@ class StudentRestAdapterTest {
     verify(restMapper, times(1)).toStudentResponse(any(Student.class));
   }
 
-  void testDelete() throws Exception {
+  @Test
+  void givenExistingStudentId_whenDelete_thenReturnsNoContent() throws Exception {
     doNothing().when(inputPort).deleteById(anyLong());
 
     mockMvc.perform(delete("/students/{id}", 1L)

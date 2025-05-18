@@ -42,7 +42,7 @@ class StudentPersistenceAdapterTest {
   private StudentPersistenceAdapter persistenceAdapter;
 
   @Test
-  void testFindById_Success() {
+  void givenExistingStudentId_whenFindById_thenReturnMappedStudent() {
     Student studentExpected = TestUtils.buildStudentMock();
     StudentEntity entity = TestUtils.buildStudentEntityMock();
 
@@ -70,7 +70,7 @@ class StudentPersistenceAdapterTest {
   }
 
   @Test
-  void testFindById_NotFound() {
+  void givenNonExistingStudentId_whenFindById_thenReturnEmptyOptional() {
     when(jpaRepository.findById(anyLong()))
         .thenReturn(Optional.empty());
 
@@ -85,7 +85,7 @@ class StudentPersistenceAdapterTest {
   }
 
   @Test
-  void testFindByIds_Success() {
+  void givenValidStudentIds_whenFindByIds_thenReturnMappedStudentList() {
     List<StudentEntity> entities = Collections.singletonList(TestUtils.buildStudentEntityMock());
     List<Student> students = Collections.singletonList(TestUtils.buildStudentMock());
 
@@ -106,7 +106,7 @@ class StudentPersistenceAdapterTest {
   }
 
   @Test
-  void testFindByAll_Success() {
+  void givenExistingStudents_whenFindAll_thenReturnAllMappedStudents() {
     List<StudentEntity> entities = Collections.singletonList(TestUtils.buildStudentEntityMock());
     List<Student> students = Collections.singletonList(TestUtils.buildStudentMock());
 
@@ -127,7 +127,7 @@ class StudentPersistenceAdapterTest {
   }
 
   @Test
-  void testExistsByEmail_True() {
+  void givenExistingEmail_whenExistsByEmail_thenReturnTrue() {
     when(jpaRepository.existsByEmailIgnoreCase(anyString()))
         .thenReturn(Boolean.TRUE);
 
@@ -139,7 +139,7 @@ class StudentPersistenceAdapterTest {
   }
 
   @Test
-  void testSave() {
+  void givenValidStudent_whenSave_thenPersistAndReturnMappedStudent() {
     Student student = TestUtils.buildStudentMock();
     StudentEntity entity = TestUtils.buildStudentEntityMock();
 
@@ -163,7 +163,7 @@ class StudentPersistenceAdapterTest {
   }
 
   @Test
-  void testDeleteById() {
+  void givenValidStudentId_whenDeleteById_thenDeleteStudentFromDatabase() {
     doNothing().when(jpaRepository).deleteById(anyLong());
 
     persistenceAdapter.deleteById(1L);

@@ -12,8 +12,10 @@ import com.tecylab.ms.students.app.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.tecylab.ms.students.app.infrastructure.adapters.input.rest.models.enums.ErrorType.FUNCTIONAL;
@@ -35,6 +37,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ActiveProfiles("test")
+@ContextConfiguration(classes = {
+    StudentRestAdapter.class,
+    GlobalControllerAdvice.class
+})
 @WebMvcTest(controllers = { StudentRestAdapter.class })
 class GlobalControllerAdviceTest {
 
@@ -44,10 +51,10 @@ class GlobalControllerAdviceTest {
   @Autowired
   private ObjectMapper objectMapper;
 
-  @MockBean
+  @MockitoBean
   private StudentInputPort inputPort;
 
-  @MockBean
+  @MockitoBean
   private StudentRestMapper restMapper;
 
   @Test
